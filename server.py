@@ -10,7 +10,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind socket to a port
 # server_address = ('localhost', 6666)
-server_address = ('192.168.2.249', 6666)
+server_address = ('192.168.2.249', 6667)
 print('Starting up on %s port %s' % server_address)
 sock.bind(server_address)
 
@@ -24,6 +24,8 @@ def recv_exact(conn, length):
         if not data:
             return data
         buffer += data
+        if (len(data) > 0):
+            print(len(buffer))
     return buffer
 
 while True:
