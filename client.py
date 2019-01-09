@@ -14,7 +14,7 @@ sock.connect(server_address)
 
 try:
     #while True:
-    im = Image.open('./wow_img.jpeg')
+    im = Image.open('./cyrus_resized.jpg')
     im_bytes = im.tobytes()
     
     sock.sendall(im_bytes)

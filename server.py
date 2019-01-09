@@ -9,7 +9,8 @@ BYTES_IN_IMAGE = 12288000
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind socket to a port
-server_address = ('localhost', 6666)
+# server_address = ('localhost', 6666)
+server_address = ('192.168.2.249', 6666)
 print('Starting up on %s port %s' % server_address)
 sock.bind(server_address)
 
