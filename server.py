@@ -10,7 +10,7 @@ import zstandard as zstd
 
 #w = 500
 #h = 200
-w = 2560
+w = 2200
 h = 1600
 BYTES_IN_IMAGE = w * h * 3
 
@@ -38,8 +38,8 @@ class ListenThread(Thread):
 
     def recv_image(self, conn):
         size = self.recv_exact(conn, 3)
-        print('Got size ', size)
         size = int.from_bytes(size, byteorder='big')
+        print('Got size %d' % size)
         return self.recv_exact(conn, size)
 
     def run(self):
@@ -50,7 +50,7 @@ class ListenThread(Thread):
 
         # Bind socket to a port
         #server_address = ('localhost', 6666)
-        server_address = ('192.168.1.67', 6003)
+        server_address = ('192.168.1.67', 6009)
         #server_address = ('a0:ce:c8:0f:46:63', 6000)
         print('Starting up on %s port %s' % server_address)
         sock.bind(server_address)
@@ -91,7 +91,8 @@ class Runner(object):
         self.has_connection = False
 
     def post_new_data(self, data):
-        self.image_queue.put(data)
+        if self.image_queue.qsize() <= 2:
+            self.image_queue.put(data)
 
     def connection_received(self):
         self.has_connection = True
@@ -117,7 +118,7 @@ class Runner(object):
             if (len(image_bytes) > 0):
                 print(len(image_bytes))
                 if first_time:
-                    pygame.display.set_mode((0, 0), pygame.NOFRAME)
+                    pygame.display.set_mode((0, 0), pygame.NOFRAME|pygame.HWSURFACE|pygame.DOUBLEBUF)
                     first_time = False
                 img = pygame.image.fromstring(image_bytes, size, 'RGB')
                 print('pygame fromstring %f' % (time.time() - cur_time))
